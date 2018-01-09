@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+		<link id="favicon" rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <title>HTML5 API Experiments: Page Visibility</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono" rel="stylesheet">
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <style>
+
+    	.container {
+    		max-width: 720px;
+    	}
+
+  	</style>
+
+	</head>
+
+  <body class="bg-light">
+
+    <main role="main" class="container">
+
+    	<div class="alert alert-primary mt-3" role="alert">
+			  Move away from this window/tab to pause the video
+			</div>
+
+    	<div class="embed-responsive embed-responsive-16by9">
+  			<video id="videoElement" controls loop autoplay>
+				  <source src="bigbuckbunny_60seconds.mp4" type="video/mp4">
+				  Your browser does not support HTML5 video.
+				</video>
+			</div>
+
+			<div class="card mt-4 mb-5">
+			  <div class="card-body">
+			    <h4 class="card-title">Page Visibility</h4>
+			    <h6 class="card-subtitle mb-4 text-muted">HTML5 API Experiments</h6>
+			    <p class="card-text">Using the Page Visibility API we can programmatically determine the visibility of the document. This presents a number of potential resource efficiencies.</p>
+			    <p class="card-text">In this example, the video will automatically pause if you move away from the tab/window. This will improve the user experience and optimize CPU and power efficiency of the application.</p>
+			    <p>You'll also notice the favicon change when the user moves away from the document.</p>
+			    <p class="card-text">Let's take a look at the code:</p>
+<pre><code>var videoElement = document.getElementById("videoElement");
+function handleVisibilityChange() {
+  if (document.visibilityState == "hidden") {
+    videoElement.pause();
+  }
+}
+document.addEventListener('visibilitychange', handleVisibilityChange, false);
+</code></pre>
+
+					<p>This API is fairly straight-forward: we add an event listener that listens for the event 'visibilitychange' and, in our case, runs a function called that manages the video playback.</p>
+					<h5>Read on</h5>
+					<ul>
+						<li><a href="https://w3c.github.io/page-visibility/" target="_blank">W3C Specification</a></li>
+						<li><a href="https://caniuse.com/#feat=pagevisibility" target="_blank">Can I Use It? Browser Support</a></li>
+						<li><a href="https://github.com/ymdahi/html5-api-experiments" target="_blank">This project on GitHub</a></li>
+						<li><a href="https://github.com/ymdahi">More Experiments</a></li>
+			  </div>
+			</div>
+
+
+    </main><!-- /main .container -->
+
+    <footer>
+    	<p class="p-2 text-center text-secondary"><a href="ymdahi.github.io">ymdahi's devlog</a>. All content on this site is licensed under <a href="https://creativecommons.org/licenses/by/3.0/deed" target="_blank">CC BY 3.0</a></p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+		<script type="text/javascript">
+			var videoElement = document.getElementById("videoElement");
+			var videoPausedAt;
+			function handleVisibilityChange() {
+			  if (document.visibilityState == "hidden") {
+			    videoElement.pause();
+			    videoPausedAt = (Math.round(videoElement.currentTime * 100) / 100) + 's';
+			    $('.alert').text('Video paused at ' + videoPausedAt + ' because you left this window.');
+			    $('.alert').removeClass('alert-primary').addClass('alert-warning');
+			    $('#favicon').attr("href","pause.ico");
+			    console.log('Video paused @ ' + videoPausedAt);
+			  }
+			}
+	    videoElement.addEventListener('playing', function(){
+	    	$('#favicon').attr("href","play.ico");
+	    })
+	    videoElement.addEventListener('pause', function(){
+	    	$('#favicon').attr("href","pause.ico");
+	    })
+
+			document.addEventListener('visibilitychange', handleVisibilityChange, false);
+
+		</script>
+  </body>
+</html>
